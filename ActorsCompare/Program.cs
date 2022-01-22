@@ -35,32 +35,6 @@ namespace ActorsCompare
 
     }
 
-    public class FilmsConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return false;
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.StartArray)
-            {
-                return serializer.Deserialize(reader, objectType);
-            }
-            else if (reader.TokenType == JsonToken.StartObject)
-            {
-                
-            }
-            return new string[] { reader.Value.ToString() };
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     class ActorsComparator
     {
         public Actor firstActor;
@@ -131,8 +105,10 @@ namespace ActorsCompare
             var comparator = new ActorsComparator(firstActor, secondActor);
 
             string jsonA = comparator.GetActor(firstActor.id);
+            string jsonB = comparator.GetActor(secondActor.id);
             Console.WriteLine("----------------------------------------------");
             comparator.ParseActor(jsonA);
+            comparator.ParseActor(jsonB);
             // comparator.GetActor(secondActor.id);
         }
     }
