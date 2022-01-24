@@ -36,7 +36,7 @@ namespace ActorsCompare
     
     class Program
     {
-        static async System.Threading.Tasks.Task Main(string[] args)
+        static void Main(string[] args)
         {
             var firstActor = new Actor(7836);
             var secondActor = new Actor(9838);
