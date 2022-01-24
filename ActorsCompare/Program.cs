@@ -7,25 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 namespace ActorsCompare
-{
-    class Actor
-    {
-        public int id;
-        public string name;
-
-        public Actor(int _id)
-        {
-            id = _id;
-        }
-    }
-
-    public class ActorJSON
-    {
-        public string nameRu { get; set; }
-        public List<Movie> films { get; set; }
-
-    }
-    
+{   
     class Program
     {
         static void Main(string[] args)
