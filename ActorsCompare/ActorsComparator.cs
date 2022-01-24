@@ -111,7 +111,7 @@ namespace ActorsCompare
             {
                 foreach (Movie m2 in secondList)
                 {
-                    if ((m1.filmId == m2.filmId) && !res.Contains(m1.filmId.ToString()) && m1.rating != null && m2.rating != null)
+                    if ((m1.filmId == m2.filmId) && !res.Contains(m1.filmId.ToString()) && m1.rating != null)
                     {
                         res.Add(m1.filmId.ToString());
                         Console.WriteLine(m1.filmId + " " + m1.nameRu + " " + m1.rating);
