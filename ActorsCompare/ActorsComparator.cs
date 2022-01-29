@@ -76,17 +76,55 @@ namespace ActorsCompare
         {
             List<CommonFilm> res = new List<CommonFilm>();
 
+            List<int> firstFilmsId = new List<int>();
+            List<int> secondFilmsId = new List<int>();
+
+            var temp1 = from f in firstList
+                        from s in secondList
+                            //    where f.professionKey == "ACTOR" && s.professionKey == "ACTOR" && f.filmId == s.filmId
+                        where f.filmId == s.filmId  
+                                && !f.description.Contains("гость") 
+                                && !s.description.Contains("гость")
+                                && (f.description.Contains("самого себя") ^ f.professionKey == "ACTOR")
+                                && (s.description.Contains("самого себя") ^ s.professionKey == "ACTOR")
+                        select new CommonMovie
+                        {
+                            filmId = f.filmId,
+                            role1 = f.description,
+                            role2 = s.description,
+                            prof1 = f.professionKey,
+                            prof2 = s.professionKey
+                        };
+
+            temp1 = temp1.Distinct();
+
+            foreach (var t in temp1)
+            {
+                Console.WriteLine("id: " + t.filmId + " role1: " + t.role1 + t.prof1 + " role2: " + t.role2 + t.prof2);
+            }
+
+            var temp2 = from f in secondList
+                        select f.filmId;
+            
+
             foreach (var i in firstList)
             {
                 foreach (var j in secondList)
                 {
                     if (i.filmId == j.filmId)
                     {
-                        CommonFilm commonFilm = new CommonFilm(i.filmId, firstActor.id, secondActor.id, i.description, j.description, i.rating);
-                        res.Add(commonFilm);
+                        CommonFilm comFilm = new CommonFilm();
+                        comFilm.filmId = i.filmId;
+                        comFilm.firstId = firstActor.id;
+                        comFilm.secondId = secondActor.id;
+                        comFilm.firstHero = i.description;
+                        comFilm.secondHero = j.description;
+                        comFilm.rating = i.rating;                        
+                        res.Add(comFilm);
                     }
                 }
             }
+            res.Distinct();
             return res;
         }
 
@@ -102,7 +140,7 @@ namespace ActorsCompare
 
             foreach (var i in res)
             {
-                Console.WriteLine("id: " + i.filmId + " id1: " + i.firstId + " role1: " + i.firstHero + " id2: " + i.secondId + " role2: " + i.secondHero + " rate: " + i.rating);
+               // Console.WriteLine("id: " + i.filmId + " id1: " + i.firstId + " role1: " + i.firstHero + " id2: " + i.secondId + " role2: " + i.secondHero + " rate: " + i.rating);
             }
             //List<string> res = new List<string>();
 
