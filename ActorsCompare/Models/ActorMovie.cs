@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ActorsCompare
 {
-    public class Movie
+    public class ActorMovie
     {
         public int filmId { get; set; }
         public string nameRu { get; set; }

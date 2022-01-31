@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -13,80 +12,92 @@ namespace ActorsCompare
         public Actor firstActor;
         public Actor secondActor;
 
-        public ActorsComparator(Actor _firstActor, Actor _secondActor)
+        private List<ActorMovie> firstList;
+        private List<ActorMovie> secondList;
+
+        public ActorsComparator(int firstId, int secondId)
         {
-            firstActor = _firstActor;
-            secondActor = _secondActor;
+            firstActor = new Actor(firstId);
+            secondActor = new Actor(secondId);
         }
 
-        public string GetActor(int id)
+        private string ApiRequest(string url)
         {
-            var url = "https://kinopoiskapiunofficial.tech/api/v1/staff/" + id;
-
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-
-            httpRequest.Headers["accept"] = "application/json";
-            httpRequest.Headers["X-API-KEY"] = "23dd74b2-f381-4657-9433-4ea66638f27d";
-
-            string resultJSON = null;
-
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            if (string.IsNullOrWhiteSpace(url))
             {
-                resultJSON = streamReader.ReadToEnd();
+                throw new ArgumentNullException(nameof(url));
             }
-
-            Console.WriteLine(httpResponse.StatusCode);
-
-            return resultJSON;
-        }
-
-        public List<Movie> ParseActor(string actJSON)
-        {
-            ActorJSON actorJSON = JsonConvert.DeserializeObject<ActorJSON>(actJSON);
-
-            Console.WriteLine(actorJSON.nameRu);
-            foreach (var item in actorJSON.films)
+            else
             {
-                if (item.professionKey == "ACTOR")
+                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+
+                httpRequest.Headers["accept"] = "application/json";
+                httpRequest.Headers["X-API-KEY"] = "23dd74b2-f381-4657-9433-4ea66638f27d";
+
+                string resultJSON;
+
+                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    Console.WriteLine(item.filmId + " " + item.nameRu + " " + item.description + " " + item.professionKey + " " + item.rating);
+                    resultJSON = streamReader.ReadToEnd();
                 }
-            }
 
-            return actorJSON.films;
+                Console.WriteLine(httpResponse.StatusCode);
+
+                return resultJSON;
+            }
         }
 
-        //public string[,] MovieListToArray(List<Movie> movie)
-        //{
-        //    string[,] str = new string[movie.Count, 2];
-        //    int i = 0;
-
-        //    foreach (var item in movie)
-        //    {
-        //        str[i, 0] = item.filmId.ToString();
-        //        str[i, 1] = item.nameRu;
-        //        i++;
-        //    }
-
-        //    return str;
-        //}
-
-        public List<CommonFilm> CompareMovieList(List<Movie> firstList, List<Movie> secondList)
+        private string GetActor(int? id)
         {
-            List<CommonFilm> res = new List<CommonFilm>();
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+            else
+            {
+                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/staff/" + id);
+            }
+        }
 
-            List<int> firstFilmsId = new List<int>();
-            List<int> secondFilmsId = new List<int>();
+        private string GetFilm(int? id)
+        {
+            if (id != null)
+            {
+                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v2.2/films/" + (int)id);                
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+        }
 
+        private List<ActorMovie> ParseActorMovie(string actJSON)
+        {
+            if (string.IsNullOrWhiteSpace(actJSON))
+            {
+                throw new ArgumentNullException(nameof(actJSON));
+            }
+            else
+            {
+                return JsonConvert.DeserializeObject<ActorJSON>(actJSON).films;
+            }
+        }
+        
+        private Film ParseFilm(string filmJSON)
+        {
+            return JsonConvert.DeserializeObject<Film>(filmJSON);
+        }
+
+        private List<CommonMovie> CompareMovieList()
+        {            
             var temp1 = from f in firstList
                         from s in secondList
-                            //    where f.professionKey == "ACTOR" && s.professionKey == "ACTOR" && f.filmId == s.filmId
-                        where f.filmId == s.filmId  
-                                && !f.description.Contains("гость") 
-                                && !s.description.Contains("гость")
-                                && (f.description.Contains("самого себя") ^ f.professionKey == "ACTOR")
-                                && (s.description.Contains("самого себя") ^ s.professionKey == "ACTOR")
+                        where f.filmId == s.filmId
+                              && !f.description.Contains("гость")
+                              && !s.description.Contains("гость")
+                              && (f.description.Contains("самого себя") ^ f.professionKey == "ACTOR")
+                              && (s.description.Contains("самого себя") ^ s.professionKey == "ACTOR")
                         select new CommonMovie
                         {
                             filmId = f.filmId,
@@ -96,35 +107,8 @@ namespace ActorsCompare
                             prof2 = s.professionKey
                         };
 
-            temp1 = temp1.Distinct();
-
-            foreach (var t in temp1)
-            {
-                Console.WriteLine("id: " + t.filmId + " role1: " + t.role1 + t.prof1 + " role2: " + t.role2 + t.prof2);
-            }
-
-            var temp2 = from f in secondList
-                        select f.filmId;
+            List < CommonMovie > res = temp1.ToList<CommonMovie>();
             
-
-            foreach (var i in firstList)
-            {
-                foreach (var j in secondList)
-                {
-                    if (i.filmId == j.filmId)
-                    {
-                        CommonFilm comFilm = new CommonFilm();
-                        comFilm.filmId = i.filmId;
-                        comFilm.firstId = firstActor.id;
-                        comFilm.secondId = secondActor.id;
-                        comFilm.firstHero = i.description;
-                        comFilm.secondHero = j.description;
-                        comFilm.rating = i.rating;                        
-                        res.Add(comFilm);
-                    }
-                }
-            }
-            res.Distinct();
             return res;
         }
 
@@ -133,49 +117,24 @@ namespace ActorsCompare
             string jsonFirst = GetActor(firstActor.id);
             string jsonSecond = GetActor(secondActor.id);
 
-            List<Movie> firstList = ParseActor(jsonFirst);
-            List<Movie> secondList = ParseActor(jsonSecond);
+            firstList = ParseActorMovie(jsonFirst);
+            secondList = ParseActorMovie(jsonSecond);
 
-            List<CommonFilm> res = CompareMovieList(firstList, secondList);
+            List<CommonMovie> res = CompareMovieList();
+            List<Film> filmList = new List<Film>();
 
-            foreach (var i in res)
+            foreach (var t in res)
             {
-               // Console.WriteLine("id: " + i.filmId + " id1: " + i.firstId + " role1: " + i.firstHero + " id2: " + i.secondId + " role2: " + i.secondHero + " rate: " + i.rating);
+                var temp = GetFilm(t.filmId);
+                Film film = ParseFilm(temp);
+                filmList.Add(film);
+                Console.WriteLine("new: id: " + t.filmId + " role1: " + t.role1 + t.prof1 + " role2: " + t.role2 + t.prof2);
             }
-            //List<string> res = new List<string>();
 
-            //foreach (Movie m1 in firstList)
-            //{
-            //    foreach (Movie m2 in secondList)
-            //    {
-            //        if ((m1.filmId == m2.filmId) && !res.Contains(m1.filmId.ToString()) && m1.rating != null)
-            //        {
-            //            res.Add(m1.filmId.ToString());
-            //            Console.WriteLine(m1.filmId + " " + m1.nameRu + " " + m1.rating);
-            //        }
-            //    }
-            //}
-            //Console.WriteLine("------------------------------");
-            //foreach (string s in res)
-            //{
-            //    Console.WriteLine(s);
-            //}
-            //Console.WriteLine("------------------------------");
-
-
-            //string[,] firstArray = MovieListToArray(firstList);
-            //string[,] secondArray = MovieListToArray(secondList);
-
-            //for (int i = 0; i < firstList.Count; i++)
-            //{
-            //    for (int j = 0; j < secondList.Count; j++)
-            //    {
-            //        if (firstArray[i, 0] == secondArray[j, 0])
-            //        {
-            //            //     Console.WriteLine("id: " + firstArray[i,0] + " name: " + firstArray[i,1] );
-            //        }
-            //    }
-            //}
+            foreach (var f in filmList)
+            {
+                Console.WriteLine("id: " + f.kinopoiskId + " name: " + f.nameRu + " year: " + f.year);
+            }    
         }
     }
 }
