@@ -19,11 +19,7 @@ namespace ActorsCompare
 
         private string ApiRequest(string url)
         {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                throw new ArgumentNullException(nameof(url));
-            }
-            else
+            if (!string.IsNullOrWhiteSpace(url))
             {
                 var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
@@ -41,6 +37,10 @@ namespace ActorsCompare
                 Console.WriteLine(httpResponse.StatusCode);
 
                 return resultJSON;
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(url));
             }
         }
 
@@ -81,17 +81,6 @@ namespace ActorsCompare
                 throw new ArgumentNullException(nameof(id));
             }
         }
-        //private List<ActorMovie> ParseActorMovie(string actMovieJSON)
-        //{
-        //    if (string.IsNullOrWhiteSpace(actMovieJSON))
-        //    {
-        //        throw new ArgumentNullException(nameof(actMovieJSON));
-        //    }
-        //    else
-        //    {
-        //        return JsonConvert.DeserializeObject<Actor>(actMovieJSON).films;
-        //    }
-        //}
         
         private Film ParseFilm(int? id)
         {
@@ -123,31 +112,63 @@ namespace ActorsCompare
                             prof2 = s.professionKey
                         };
 
-            List<CommonMovie> res = temp1.ToList<CommonMovie>();
+            List<CommonMovie> temp2 = temp1.ToList<CommonMovie>();
             
-            return res;
+            return temp2;
         }
 
         public void WriteResult()
         {
             foreach (var f in filmList)
             {
-                var role1 = from r in firstActor.films
-                            where r.filmId == f.kinopoiskId
-                            select r.description;
+                string role1 = null;
+                foreach (ActorMovie f1 in firstActor.films)
+                {
+                    if (f1.filmId == f.kinopoiskId)
+                    {
+                        role1 = f1.description;
+                    }
+                }
 
-                var role2 = from r in res
-                            where r.filmId == f.kinopoiskId
-                            select r.role2;
-
+                string role2 = null;
+                foreach (ActorMovie f2 in secondActor.films)
+                {
+                    if (f2.filmId == f.kinopoiskId)
+                    {
+                        role2 = f2.description;
+                    }
+                }
+                
                 StringBuilder sb = new StringBuilder();
                 sb.Append("id: " + f.kinopoiskId);
                 sb.Append(" name: " + f.nameRu);
                 sb.Append(" year: " + f.year);
                 sb.Append(" role1: " + role1.ToString());
                 sb.Append(" role2: " + role2.ToString());
-                Console.WriteLine(sb.ToString());
-              //  Console.WriteLine("id: " + f.kinopoiskId + " name: " + f.nameRu + " year: " + f.year);
+
+                if (f.ratingKinopoisk == null)
+                {
+                    sb.Append(" rate: no rate ");
+                }
+                else
+                {
+                    sb.Append(" rate: " + f.ratingKinopoisk);
+                }
+
+                sb.Append(" genre: ");
+                foreach(Genre g in f.genres)
+                {
+                    if (g == f.genres.Last())
+                    {
+                        sb.Append(g.genre + ".");
+                    }
+                    else
+                    {
+                        sb.Append(g.genre + ", ");
+                    }
+                }
+
+                Console.WriteLine(sb.ToString());              
             }
         }
 
@@ -169,7 +190,6 @@ namespace ActorsCompare
             {
                 Film film = ParseFilm(t.filmId);
                 filmList.Add(film);
-               // Console.WriteLine("new: id: " + t.filmId + " role1: " + t.role1 + t.prof1 + " role2: " + t.role2 + t.prof2);
             }
 
             WriteResult();
