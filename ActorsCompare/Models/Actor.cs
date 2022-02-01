@@ -4,14 +4,10 @@ using System.Text;
 
 namespace ActorsCompare
 {
-    class Actor
+    public class Actor
     {
-        public int id;
-        public string name;
-
-        public Actor(int _id)
-        {
-            id = _id;
-        }
+        public int personId { get; set; }
+        public string nameRu { get; set; }
+        public List<ActorMovie> films { get; set; }
     }
 }

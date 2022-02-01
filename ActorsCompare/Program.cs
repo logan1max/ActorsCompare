@@ -15,7 +15,7 @@ namespace ActorsCompare
             int firstId = 7836;
             int secondId = 9838;
 
-            ActorsComparator comparator = new ActorsComparator(firstId, secondId);
+            ActorsComparator comparator = new ActorsComparator();
             
             comparator.CompareActors();
         }
