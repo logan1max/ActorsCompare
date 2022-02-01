@@ -9,7 +9,7 @@ namespace ActorsCompare
 {
     public class ApiModule
     {
-        public string ApiRequest(string url)
+        private string ApiRequest(string url)
         {
             if (!string.IsNullOrWhiteSpace(url))
             {
@@ -36,7 +36,7 @@ namespace ActorsCompare
             }
         }
 
-        public string GetActor(int? id)
+        private string GetActor(int? id)
         {
             if (id != null)
             {
@@ -49,7 +49,7 @@ namespace ActorsCompare
             }
         }
 
-        public string GetFilm(int? id)
+        private string GetFilm(int? id)
         {
             if (id != null)
             {

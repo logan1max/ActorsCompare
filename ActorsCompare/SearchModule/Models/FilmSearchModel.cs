@@ -4,7 +4,8 @@ using System.Text;
 
 namespace ActorsCompare.SearchModule.Models
 {
-    class FilmSearchModel
+    public class FilmSearchModel
     {
+
     }
 }
