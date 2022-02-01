@@ -110,7 +110,5 @@ namespace ActorsCompare
                 throw new ArgumentNullException(nameof(name));
             }
         }
-
-
     }
 }

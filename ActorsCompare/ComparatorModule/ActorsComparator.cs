@@ -117,7 +117,6 @@ namespace ActorsCompare
 
             WriteResult();
 
-
             //search
             ActorSearchModel actorSearchModel = api.ParseActorListByName("питт", 2);
 
