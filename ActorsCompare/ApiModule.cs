@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
+using ActorsCompare.SearchModule.Models;
 
 namespace ActorsCompare
 {
@@ -62,6 +63,18 @@ namespace ActorsCompare
             }
         }
 
+        private string GetActorByKeyword(string name, int? page)
+        {
+            if (!string.IsNullOrWhiteSpace(name) && page != null)
+            {
+                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/persons?name=" + name + "&page=" + page);
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+        }
+
         public Actor ParseActor(int? id)
         {
             if (id != null)
@@ -85,5 +98,19 @@ namespace ActorsCompare
                 throw new ArgumentNullException(nameof(id));
             }
         }
+
+        public ActorSearchModel ParseActorListByName(string name, int? page)
+        {
+            if (!string.IsNullOrWhiteSpace(name) && page != null)
+            {
+                return JsonConvert.DeserializeObject<ActorSearchModel>(GetActorByKeyword(name, page));
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+        }
+
+
     }
 }

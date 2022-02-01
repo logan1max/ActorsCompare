@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using ActorsCompare.SearchModule.Models;
 
 namespace ActorsCompare
 {
@@ -115,6 +116,16 @@ namespace ActorsCompare
             }
 
             WriteResult();
+
+
+            //search
+            ActorSearchModel actorSearchModel = api.ParseActorListByName("питт", 2);
+
+            Console.WriteLine("total: " + actorSearchModel.total);
+            foreach (var i in actorSearchModel.items)
+            {
+                Console.WriteLine("id: " + i.kinopoiskId + " nameRu: " + i.nameRu + " nameEn: " + i.nameEn + " sex: " + i.sex);
+            }
         }
     }
 }

@@ -7,7 +7,5 @@ namespace ActorsCompare
     public class Search
     {
 
-
-
     }
 }

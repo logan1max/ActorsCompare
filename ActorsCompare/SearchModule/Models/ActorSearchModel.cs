@@ -6,6 +6,7 @@ namespace ActorsCompare.SearchModule.Models
 {
     public class ActorSearchModel
     {
-
+        public int total { get; set; }
+        public List<ActorItem> items { get; set; }
     }
 }
