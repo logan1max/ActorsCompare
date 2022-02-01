@@ -17,82 +17,89 @@ namespace ActorsCompare
 
         public List<CommonMovie> res;
 
-        private string ApiRequest(string url)
+        public ApiModule api = new ApiModule();
+
+        public ActorsComparator()
         {
-            if (!string.IsNullOrWhiteSpace(url))
-            {
-                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
-                httpRequest.Headers["accept"] = "application/json";
-                httpRequest.Headers["X-API-KEY"] = "23dd74b2-f381-4657-9433-4ea66638f27d";
-
-                string resultJSON;
-
-                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    resultJSON = streamReader.ReadToEnd();
-                }
-
-                Console.WriteLine(httpResponse.StatusCode);
-
-                return resultJSON;
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(url));
-            }
         }
 
-        private string GetActor(int? id)
-        {
-            if (id != null)
-            {
-                Console.WriteLine("actor id: " + id);
-                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/staff/" + id);                
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-        }
+        //private string ApiRequest(string url)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(url))
+        //    {
+        //        var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
-        private string GetFilm(int? id)
-        {
-            if (id != null)
-            {
-                Console.WriteLine("film id: " + id);
-                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v2.2/films/" + (int)id);                
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-        }
+        //        httpRequest.Headers["accept"] = "application/json";
+        //        httpRequest.Headers["X-API-KEY"] = "23dd74b2-f381-4657-9433-4ea66638f27d";
 
-        private Actor ParseActor(int? id)
-        {
-            if (id != null)
-            {                
-                return JsonConvert.DeserializeObject<Actor>(GetActor(id));
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-        }
+        //        string resultJSON;
+
+        //        var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+        //        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+        //        {
+        //            resultJSON = streamReader.ReadToEnd();
+        //        }
+
+        //        Console.WriteLine(httpResponse.StatusCode);
+
+        //        return resultJSON;
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentNullException(nameof(url));
+        //    }
+        //}
+
+        //private string GetActor(int? id)
+        //{
+        //    if (id != null)
+        //    {
+        //        Console.WriteLine("actor id: " + id);
+        //        return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/staff/" + id);                
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentNullException(nameof(id));
+        //    }
+        //}
+
+        //private string GetFilm(int? id)
+        //{
+        //    if (id != null)
+        //    {
+        //        Console.WriteLine("film id: " + id);
+        //        return ApiRequest("https://kinopoiskapiunofficial.tech/api/v2.2/films/" + (int)id);                
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentNullException(nameof(id));
+        //    }
+        //}
+
+        //private Actor ParseActor(int? id)
+        //{
+        //    if (id != null)
+        //    {                
+        //        return JsonConvert.DeserializeObject<Actor>(GetActor(id));
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentNullException(nameof(id));
+        //    }
+        //}
         
-        private Film ParseFilm(int? id)
-        {
-            if (id != null)
-            {
-                return JsonConvert.DeserializeObject<Film>(GetFilm(id));
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-        }
+        //private Film ParseFilm(int? id)
+        //{
+        //    if (id != null)
+        //    {
+        //        return JsonConvert.DeserializeObject<Film>(GetFilm(id));
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentNullException(nameof(id));
+        //    }
+        //}
 
         private List<CommonMovie> CompareMovieList()
         {            
@@ -177,8 +184,8 @@ namespace ActorsCompare
             int firstId = 7836;
             int secondId = 9838;
 
-            firstActor = ParseActor(firstId);
-            secondActor = ParseActor(secondId);
+            firstActor = api.ParseActor(firstId);
+            secondActor = api.ParseActor(secondId);
 
             Console.WriteLine("first: " + firstActor.nameRu);
             Console.WriteLine("second: " + secondActor.nameRu);
@@ -188,7 +195,7 @@ namespace ActorsCompare
 
             foreach (var t in res)
             {
-                Film film = ParseFilm(t.filmId);
+                Film film = api.ParseFilm(t.filmId);
                 filmList.Add(film);
             }
 
