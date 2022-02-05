@@ -16,15 +16,16 @@ namespace ActorsCompare
 
         private List<CommonMovie> res;
 
-        private ApiModule api = new ApiModule();
+        private ApiModule api;
 
         public ActorsComparator(int firstId, int secondId)
         {
-            firstActor = api.ParseActor(firstId);
+            api = new ApiModule();//вот только эта строчка нужна здесь, входные параметры убери
+            firstActor = api.ParseActor(firstId);//вот эти две нижние строки вынеси в метод сравнения
             secondActor = api.ParseActor(secondId);
         }
 
-        private List<CommonMovie> CompareMovieList()
+        private List<CommonMovie> CompareMovieList()//опять таки используй входные параметры, не нужно глобальных листов, этот класс это по сути сервис
         {            
             var temp1 = from f in firstActor.films
                         from s in secondActor.films
@@ -41,13 +42,11 @@ namespace ActorsCompare
                             prof1 = f.professionKey,
                             prof2 = s.professionKey
                         };
-
-            List<CommonMovie> temp2 = temp1.ToList<CommonMovie>();
             
-            return temp2;
+            return temp1.ToList();
         }
 
-        private void WriteResult()
+        private void WriteResult()//в этом методе сделать входной параметр, filmlist, глобальными переменными используй только константы, сервисы и репозитории, поскольку у тебя нет вьюхи, глобальных листов быть не должно
         {
             foreach (var f in filmList)
             {
@@ -69,7 +68,7 @@ namespace ActorsCompare
                     }
                 }
                 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();// какой смысл в билдере, если ты всеравно используешь клнкатенацию? всё переделать под билдер
                 sb.Append("id: " + f.kinopoiskId);
                 sb.Append(" name: " + f.nameRu);
                 sb.Append(" year: " + f.year);
@@ -101,7 +100,7 @@ namespace ActorsCompare
             }
         }
 
-        public void CompareActors()
+        public void CompareActors()//вообще не вижу смысла в этом методе, добавь входные параметры в виде актеров и ретурн в виде строки
         {
             Console.WriteLine("first: " + firstActor.nameRu);
             Console.WriteLine("second: " + secondActor.nameRu);

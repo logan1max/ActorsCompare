@@ -18,7 +18,7 @@ namespace ActorsCompare
                 var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
                 httpRequest.Headers["accept"] = "application/json";
-                httpRequest.Headers["X-API-KEY"] = "23dd74b2-f381-4657-9433-4ea66638f27d";
+                httpRequest.Headers["X-API-KEY"] = "23dd74b2-f381-4657-9433-4ea66638f27d";//ключ в конфиг
 
                 string resultJSON;
 
@@ -43,7 +43,7 @@ namespace ActorsCompare
             if (id != null)
             {
                 Console.WriteLine("actor id: " + id);
-                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/staff/" + id);
+                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/staff/" + id);//вынести в конфиг (прочитай про app.config)
             }
             else
             {
@@ -56,7 +56,7 @@ namespace ActorsCompare
             if (id != null)
             {
                 Console.Write("film id: " + id + " ");
-                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v2.2/films/" + (int)id);
+                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v2.2/films/" + (int)id);//ссылка в конфиг
             }
             else
             {
@@ -68,11 +68,11 @@ namespace ActorsCompare
         {
             if (!string.IsNullOrWhiteSpace(name) && page != null)
             {
-                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/persons?name=" + name + "&page=" + page);
+                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/persons?name=" + name + "&page=" + page);//ссылка в конфиг
             }
             else
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new ArgumentNullException(nameof(name));// заменить на обычный эксепшн и добавить сообщение
             }
         }
 
@@ -84,7 +84,7 @@ namespace ActorsCompare
             }
             else
             {
-                throw new ArgumentNullException(nameof(id));
+                throw new ArgumentNullException(nameof(id));// заменить на обычный эксепшн и добавить сообщение
             }
         }
 
@@ -96,7 +96,7 @@ namespace ActorsCompare
             }
             else
             {
-                throw new ArgumentNullException(nameof(id));
+                throw new ArgumentNullException(nameof(id));// заменить на обычный эксепшн и добавить сообщение
             }
         }
 
@@ -108,7 +108,7 @@ namespace ActorsCompare
             }
             else
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new ArgumentNullException(nameof(name));// заменить на обычный эксепшн и добавить сообщение
             }
         }
     }

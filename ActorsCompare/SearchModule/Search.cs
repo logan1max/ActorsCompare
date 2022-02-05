@@ -14,12 +14,12 @@ namespace ActorsCompare
             Console.WriteLine("Поиск персон по имени...");
             Console.WriteLine("Введите имя для поиска: ");
 
-            string searchName = Console.ReadLine();
+            string searchName = Console.ReadLine();// никакого считывания здесь, этот метод уже должен принимать строку
 
             ActorSearchModel actorSearchModel = api.ParseActorListByName(searchName, 1);
 
             int pages = 0;
-            if (actorSearchModel.total == 0)
+            if (actorSearchModel.total == 0)//это костыль из ифов, подумай как от него избавиться (почитай на тему избавления от ифов спомощью ооп)
             {
                 Console.WriteLine("Персоны не найдены...");
                 pages = 0;
@@ -51,7 +51,7 @@ namespace ActorsCompare
                 }
             }
 
-            if (pages == 2)
+            if (pages == 2)// не понимаю зачем?
             {
                 ActorSearchModel actorSearchModel1 = api.ParseActorListByName(searchName, 2);
                 
@@ -64,7 +64,7 @@ namespace ActorsCompare
             }
 
             Console.WriteLine("Введите номер: ");
-            int num = Convert.ToInt32(Console.ReadLine());
+            int num = Convert.ToInt32(Console.ReadLine());//подумай как от этого избавиться
 
             return actorSearchModel.items[num-1].kinopoiskId;
         }
