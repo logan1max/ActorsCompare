@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using ActorsCompare.SearchModule.Models;
+using ActorsCompare.Models;
 using System.Threading;
 
 namespace ActorsCompare

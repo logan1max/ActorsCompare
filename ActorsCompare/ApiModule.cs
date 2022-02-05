@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
-using ActorsCompare.SearchModule.Models;
+using ActorsCompare.Models;
 
 
 namespace ActorsCompare

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ActorsCompare.SearchModule.Models
+namespace ActorsCompare.Models
 {
     public class FilmSearchModel
     {

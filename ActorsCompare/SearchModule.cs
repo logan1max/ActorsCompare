@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ActorsCompare.SearchModule.Models;
+using ActorsCompare.Models;
 
 namespace ActorsCompare
 {
-    public class Search
+    public class SearchModule
     {
         private readonly ApiModule api = new ApiModule();
 
@@ -68,6 +68,5 @@ namespace ActorsCompare
 
             return actorSearchModel.items[num-1].kinopoiskId;
         }
-
     }
 }

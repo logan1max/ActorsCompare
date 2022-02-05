@@ -12,7 +12,7 @@ namespace ActorsCompare
     {
         static void Main(string[] args)
         {
-            Search search = new Search();
+            SearchModule search = new SearchModule();
 
             Console.WriteLine("Ищем первого актера...\n");
             int actor1 = search.ByName();
