@@ -6,6 +6,7 @@ using System.Text;
 using Newtonsoft.Json;
 using ActorsCompare.SearchModule.Models;
 
+
 namespace ActorsCompare
 {
     public class ApiModule
@@ -54,7 +55,7 @@ namespace ActorsCompare
         {
             if (id != null)
             {
-                Console.WriteLine("film id: " + id);
+                Console.Write("film id: " + id + " ");
                 return ApiRequest("https://kinopoiskapiunofficial.tech/api/v2.2/films/" + (int)id);
             }
             else

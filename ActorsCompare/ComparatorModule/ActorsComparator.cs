@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using ActorsCompare.SearchModule.Models;
+using System.Threading;
 
 namespace ActorsCompare
 {
@@ -16,6 +17,12 @@ namespace ActorsCompare
         public List<CommonMovie> res;
 
         public ApiModule api = new ApiModule();
+
+        public ActorsComparator(int firstId, int secondId)
+        {
+            firstActor = api.ParseActor(firstId);
+            secondActor = api.ParseActor(secondId);
+        }
 
         private List<CommonMovie> CompareMovieList()
         {            
@@ -90,19 +97,12 @@ namespace ActorsCompare
                         sb.Append(g.genre + ", ");
                     }
                 }
-
-                Console.WriteLine(sb.ToString());              
+                Console.WriteLine(sb);
             }
         }
 
         public void CompareActors()
         {
-            int firstId = 7836;
-            int secondId = 9838;
-
-            firstActor = api.ParseActor(firstId);
-            secondActor = api.ParseActor(secondId);
-
             Console.WriteLine("first: " + firstActor.nameRu);
             Console.WriteLine("second: " + secondActor.nameRu);
 
@@ -116,15 +116,6 @@ namespace ActorsCompare
             }
 
             WriteResult();
-
-            //search
-            ActorSearchModel actorSearchModel = api.ParseActorListByName("питт", 2);
-
-            Console.WriteLine("total: " + actorSearchModel.total);
-            foreach (var i in actorSearchModel.items)
-            {
-                Console.WriteLine("id: " + i.kinopoiskId + " nameRu: " + i.nameRu + " nameEn: " + i.nameEn + " sex: " + i.sex);
-            }
         }
     }
 }

@@ -12,11 +12,17 @@ namespace ActorsCompare
     {
         static void Main(string[] args)
         {
-            int firstId = 7836;
-            int secondId = 9838;
+            Search search = new Search();
 
-            ActorsComparator comparator = new ActorsComparator();
-            
+            Console.WriteLine("Ищем первого актера...\n");
+            int actor1 = search.ByName();
+
+            Console.WriteLine("Ищем второго актера...\n");
+            int actor2 = search.ByName();
+
+            Console.WriteLine("Actor1: " + actor1 + "\nActor2: " + actor2);
+
+            ActorsComparator comparator = new ActorsComparator(actor1, actor2);            
             comparator.CompareActors();
         }
     }
