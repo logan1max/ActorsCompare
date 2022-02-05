@@ -9,14 +9,14 @@ namespace ActorsCompare
 {
     class ActorsComparator
     {
-        public Actor firstActor;
-        public Actor secondActor;
+        private Actor firstActor;
+        private Actor secondActor;
 
-        public List<Film> filmList;
+        private List<Film> filmList;
 
-        public List<CommonMovie> res;
+        private List<CommonMovie> res;
 
-        public ApiModule api = new ApiModule();
+        private ApiModule api = new ApiModule();
 
         public ActorsComparator(int firstId, int secondId)
         {
