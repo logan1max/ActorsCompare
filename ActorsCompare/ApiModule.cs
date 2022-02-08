@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -18,7 +19,7 @@ namespace ActorsCompare
                 var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
                 httpRequest.Headers["accept"] = "application/json";
-                httpRequest.Headers["X-API-KEY"] = "23dd74b2-f381-4657-9433-4ea66638f27d";//ключ в конфиг
+                httpRequest.Headers["X-API-KEY"] = GetAppKey("apiKey");
 
                 string resultJSON;
 
@@ -34,8 +35,22 @@ namespace ActorsCompare
             }
             else
             {
-                throw new ArgumentNullException(nameof(url));
+                throw new Exception("URL is empty"); ;
             }
+        }
+
+        private string GetAppKey(string key)
+        {
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                var appSettings = ConfigurationManager.AppSettings;
+                return appSettings[key];
+            }
+            else
+            {
+                throw new Exception("Key is empty");
+            }
+
         }
 
         private string GetActor(int? id)
@@ -43,11 +58,11 @@ namespace ActorsCompare
             if (id != null)
             {
                 Console.WriteLine("actor id: " + id);
-                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/staff/" + id);//вынести в конфиг (прочитай про app.config)
+                return ApiRequest(GetAppKey("actorLink") + id);//вынести в конфиг (прочитай про app.config)
             }
             else
             {
-                throw new ArgumentNullException(nameof(id));
+                throw new Exception("Id is empty");
             }
         }
 
@@ -56,11 +71,11 @@ namespace ActorsCompare
             if (id != null)
             {
                 Console.Write("film id: " + id + " ");
-                return ApiRequest("https://kinopoiskapiunofficial.tech/api/v2.2/films/" + (int)id);//ссылка в конфиг
+                return ApiRequest(GetAppKey("filmLink") + (int)id);//ссылка в конфиг
             }
             else
             {
-                throw new ArgumentNullException(nameof(id));
+                throw new Exception("Id is empty");
             }
         }
 
@@ -68,11 +83,12 @@ namespace ActorsCompare
         {
             if (!string.IsNullOrWhiteSpace(name) && page != null)
             {
+                Console.WriteLine(GetAppKey("searchActorLink") + name + "&page=" + page);
                 return ApiRequest("https://kinopoiskapiunofficial.tech/api/v1/persons?name=" + name + "&page=" + page);//ссылка в конфиг
             }
             else
             {
-                throw new ArgumentNullException(nameof(name));// заменить на обычный эксепшн и добавить сообщение
+                throw new Exception("Name or page is empty");// заменить на обычный эксепшн и добавить сообщение
             }
         }
 
@@ -84,7 +100,7 @@ namespace ActorsCompare
             }
             else
             {
-                throw new ArgumentNullException(nameof(id));// заменить на обычный эксепшн и добавить сообщение
+                throw new Exception("Id is empty");// заменить на обычный эксепшн и добавить сообщение
             }
         }
 
@@ -96,7 +112,7 @@ namespace ActorsCompare
             }
             else
             {
-                throw new ArgumentNullException(nameof(id));// заменить на обычный эксепшн и добавить сообщение
+                throw new Exception("Id is empty");// заменить на обычный эксепшн и добавить сообщение
             }
         }
 
@@ -108,7 +124,7 @@ namespace ActorsCompare
             }
             else
             {
-                throw new ArgumentNullException(nameof(name));// заменить на обычный эксепшн и добавить сообщение
+                throw new Exception("Name or page is empty");// заменить на обычный эксепшн и добавить сообщение
             }
         }
     }
