@@ -69,11 +69,11 @@ namespace ActorsCompare
                 }
                 
                 StringBuilder sb = new StringBuilder();// какой смысл в билдере, если ты всеравно используешь клнкатенацию? всё переделать под билдер
-                sb.Append("id: " + f.kinopoiskId);
-                sb.Append(" name: " + f.nameRu);
-                sb.Append(" year: " + f.year);
-                sb.Append(" role1: " + role1.ToString());
-                sb.Append(" role2: " + role2.ToString());
+                sb.Append("id: "); sb.Append(f.kinopoiskId);
+                sb.Append(" name: "); sb.Append(f.nameRu);
+                sb.Append(" year: "); sb.Append(f.year);
+                sb.Append(" role1: "); sb.Append(role1.ToString());
+                sb.Append(" role2: "); sb.Append(role2.ToString());
 
                 if (f.ratingKinopoisk == null)
                 {

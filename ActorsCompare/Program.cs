@@ -15,10 +15,12 @@ namespace ActorsCompare
             SearchModule search = new SearchModule();
 
             Console.WriteLine("Ищем первого актера...\n");
-            int actor1 = search.ByName();
+            Console.WriteLine("Введите имя для поиска: ");
+            int actor1 = search.ByName(Console.ReadLine());
 
             Console.WriteLine("Ищем второго актера...\n");
-            int actor2 = search.ByName();
+            Console.WriteLine("Введите имя для поиска: ");
+            int actor2 = search.ByName(Console.ReadLine());
 
             Console.WriteLine("Actor1: " + actor1 + "\nActor2: " + actor2);
 

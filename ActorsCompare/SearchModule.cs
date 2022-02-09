@@ -9,14 +9,14 @@ namespace ActorsCompare
     {
         private readonly ApiModule api = new ApiModule();
 
-        public int ByName()
+        public int ByName(string name)
         {
-            Console.WriteLine("Поиск персон по имени...");
-            Console.WriteLine("Введите имя для поиска: ");
+         //   Console.WriteLine("Поиск персон по имени...");
+         //   Console.WriteLine("Введите имя для поиска: ");
 
-            string searchName = Console.ReadLine();// никакого считывания здесь, этот метод уже должен принимать строку
+      //      string searchName = Console.ReadLine();// никакого считывания здесь, этот метод уже должен принимать строку
 
-            ActorSearchModel actorSearchModel = api.ParseActorListByName(searchName, 1);
+            ActorSearchModel actorSearchModel = api.ParseActorListByName(name, 1);
 
             int pages = 0;
             if (actorSearchModel.total == 0)//это костыль из ифов, подумай как от него избавиться (почитай на тему избавления от ифов спомощью ооп)
@@ -53,7 +53,7 @@ namespace ActorsCompare
 
             if (pages == 2)// не понимаю зачем?
             {
-                ActorSearchModel actorSearchModel1 = api.ParseActorListByName(searchName, 2);
+                ActorSearchModel actorSearchModel1 = api.ParseActorListByName(name, 2);
                 
                 foreach (var i in actorSearchModel1.items)
                 {
